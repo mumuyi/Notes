@@ -35,6 +35,10 @@ private void grow(int minCapacity) {
 
 `fast-fail`相关，检查`modCount`和`expectedModCount`是否相等:
 
+每次新建Itr()对象时，都会保存新建该对象时对应的modCount；
+以后每次遍历List中的元素的时候，都会比较expectedModCount和modCount是否相等；
+若不相等，则抛出ConcurrentModificationException异常，产生fail-fast事件。
+
 ```java
 final void checkForComodification() {
     if (modCount != expectedModCount)
@@ -102,4 +106,3 @@ List<Integer> list = Arrays.asList(a);
 ```java
 List<Integer> list = new ArrayList<Integer>(Arrays.asList(a));
 ```
-

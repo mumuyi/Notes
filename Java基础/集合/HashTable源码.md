@@ -4,7 +4,7 @@ HashTable继承Dictionary类，实现Map接口。
 
 其中Dictionary类是任何可将键映射到相应值的类（如 `Hashtable`）的抽象父类。
 
-每个键和每个值都是一个对象。
+每个键和每个值都是一个对象。`key` 和 `value` 都不允许是 `null`
 
 在任何一个 `Dictionary` 对象中，每个键至多与一个值相关联。Map是**"key-value键值对"**接口。
 
@@ -136,4 +136,3 @@ public synchronized V get(Object key) {
     return null;
 }
 ```
-

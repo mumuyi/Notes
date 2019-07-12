@@ -6,6 +6,8 @@
 
 ![1555736490768](assets/1555736490768.png)
 
+![1555736490768](assets/hashmap8.png)
+
 每个绿色的实体是嵌套类 Entry 的实例，Entry 包含四个属性：`key, value, hash` 值和用于单向链表的 next。
 
 * `capacity`：当前数组容量，始终保持` 2^n`，可以扩容，扩容后数组大小为当前的 2 倍。
@@ -159,7 +161,7 @@ public V get(Object key) {
     // 之前说过，key 为 null 的话，会被放到 table[0]，所以只要遍历下 table[0] 处的链表就可以了
     if (key == null)
         return getForNullKey();
-    // 
+    //
     Entry<K,V> entry = getEntry(key);
 
     return null == entry ? null : entry.getValue();
@@ -233,7 +235,7 @@ public ConcurrentHashMap(int initialCapacity,
         ++c;
     // 默认 MIN_SEGMENT_TABLE_CAPACITY 是 2，这个值也是有讲究的，因为这样的话，对于具体的槽上，
     // 插入一个元素不至于扩容，插入第二个的时候才会扩容
-    int cap = MIN_SEGMENT_TABLE_CAPACITY; 
+    int cap = MIN_SEGMENT_TABLE_CAPACITY;
     while (cap < c)
         cap <<= 1;
 

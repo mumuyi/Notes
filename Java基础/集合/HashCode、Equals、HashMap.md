@@ -2,7 +2,7 @@
 
 ## 1、hashCode、Equals
 
-对于每一个对象，通过其`hashCode()`方法可为其生成一个整形值（散列码），该整型值被处理后，将会作为数组下标，存放该对象所对应的Entry（存放该对象及其对应值）。 
+对于每一个对象，通过其`hashCode()`方法可为其生成一个整形值（散列码），该整型值被处理后，将会作为数组下标，存放该对象所对应的Entry（存放该对象及其对应值）。
 equals()方法则是在HashMap中插入值或查询时会使用到。当HashMap中插入值或查询值对应的散列码与数组中的散列码相等时，则会通过`equals()`方法比较key值是否相等。
 
 总结：
@@ -43,30 +43,30 @@ hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返
 
 ## 2、重写equals方法的原因、方式和注意事项？
 
-**为什么要重写equals()方法？** 
+**为什么要重写equals()方法？**
 
- Object类中equals()方法的默认实现主要是用于判断两个对象的引用是否相同。而在实际开发过程中，通常需要比较两个对象的对应属性是否完全相同，故需要重写equals()方法。 
+ Object类中equals()方法的默认实现主要是用于判断两个对象的引用是否相同。而在实际开发过程中，通常需要比较两个对象的对应属性是否完全相同，故需要重写equals()方法。
 
-  **如何重写equals()方法？** 
+  **如何重写equals()方法？**
 
-  假设equals()方法的形参名为`otherObj`，稍后需要将其转换为另一个叫做`other`的变量。 
+  假设equals()方法的形参名为`otherObj`，稍后需要将其转换为另一个叫做`other`的变量。
 
-* （1）、检测this与otherObj是否引用同一对象：  `  if(this == otherObject) return true; `
+* （1）检测this与otherObj是否引用同一对象：  `  if(this == otherObject) return true; `
 
-* （2）、检测otherObj是否为空： `if(otherObject == null) return false`; 
-* （3）、判断this与otherObj是否属于同一个类，具体分两种情况： 
-  * a)、如果equals()方法的语义在**每个子类中均有所改变**，则使用getClass()方法进行检测： `if(getClass() != otherObject.getClass()) return false; `
-  * 如果equals()方法在所有子类中均有统一的语义，则使用instanceof关键字进行检测：  ` if (!(otherObject instanceof ClassName)) return false; `
+* （2）检测otherObj是否为空： `if(otherObject == null) return false`;
+* （3）判断this与otherObj是否属于同一个类，具体分两种情况：
+  * a) 如果equals()方法的语义在**每个子类中均有所改变**，则使用getClass()方法进行检测： `if(getClass() != otherObject.getClass()) return false; `
+  * b) 如果equals()方法在所有子类中均有统一的语义，则使用instanceof关键字进行检测：  ` if (!(otherObject instanceof ClassName)) return false; `
 
 
-* （4）、将otherObj转换为相应类的类型变量： `ClassName other = (ClassName) otherObject; `
+* （4）将otherObj转换为相应类的类型变量： `ClassName other = (ClassName) otherObject; `
 
-* （5）、对所有需要比较的域进行一一比较，若全匹配则返回true，否则返回false。 
+* （5）对所有需要比较的域进行一一比较，若全匹配则返回true，否则返回false。
 
-关于equals()语义的补充说明：假设现有Employee与Manager两个类，Manager类继承Employee类。若仅将ID作为相等的检测标准，则仅用在Employee类中重写equals()方法，并将该方法声明为final的即可，这就是所谓的「拥有统一的语义」。 
+关于equals()语义的补充说明：假设现有Employee与Manager两个类，Manager类继承Employee类。若仅将ID作为相等的检测标准，则仅用在Employee类中重写equals()方法，并将该方法声明为final的即可，这就是所谓的「拥有统一的语义」。
 
-> **重写equals()方法需要注意什么？** 
-> 归根结底，还是想问equals()方法的主要特性。Java语言规范要求equals()方法具有如下特性： 
+> **重写equals()方法需要注意什么？**
+> 归根结底，还是想问equals()方法的主要特性。Java语言规范要求equals()方法具有如下特性：
 > -    自反性：对于任何非空引用`x`，`x.equals(x)`应该返回true。    
 > -    对称性：对于任何引用x和y，当且仅当`y.equals(x)` 返回true时，`x.equals(y)`也应该返回true。    
 > -    传递性：对于任何引用x、y和z，如果`x.equals(y)` 返回true，`y.equals(z)`返回true，x.equals(z)也应该返回true。    
@@ -84,9 +84,9 @@ public boolean equals(Object obj) {
 
 ## 3、重写hashCode方法的原因、方式和注意事项？
 
- **为什么要重写hashCode()方法？** 
+ **为什么要重写hashCode()方法？**
 
- Object类中hashCode()方法默认是将对象的存储地址进行映射，并返回一个整形值作为哈希码。 
+ Object类中hashCode()方法默认是将对象的存储地址进行映射，并返回一个整形值作为哈希码。
 
  **若重写equals()方法，使其比较两个对象的内容，并保留hashCode()方法的默认实现，那么两个明明「相等」的对象，哈希值却可能不同**。
 
@@ -94,13 +94,13 @@ public boolean equals(Object obj) {
 
 **因此，在重写equals()方法时，建议一定要重写hashCode()方法**。
 
- **如何重写hashCode()方法？** 
+ **如何重写hashCode()方法？**
 
-由于Object类的 hashCode() 方法是本地的（native），故其具体实现并不是由Java所完成的。 
+由于Object类的 hashCode() 方法是本地的（native），故其具体实现并不是由Java所完成的。
 
- 需要实现hashCode()方法时，可以直接调用`Objects.hash(Object... values)`方法来获取对应的哈希值。其内部的具体实现是调用`Arrays.hashCode(Object[])`方法来完成的。 
+ 需要实现hashCode()方法时，可以直接调用`Objects.hash(Object... values)`方法来获取对应的哈希值。其内部的具体实现是调用`Arrays.hashCode(Object[])`方法来完成的。
 
-**重写hashCode()方法需要注意什么？** 
+**重写hashCode()方法需要注意什么？**
 
 -    应用程序执行期间，只要一个对象用于`equals()`方法的属性未被修改，则该对象多次返回的哈希值应相等。    
 -    **如果两个对象通过equals()方法比较的结果为true，那么要保证这两个对象的哈希值相等**。    
