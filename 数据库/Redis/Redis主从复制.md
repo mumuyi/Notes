@@ -15,7 +15,7 @@
 
 ![1_39.png](images/1_39.png)
 
-作用: 
+作用:
 
 * 读写分离；
 * 容灾恢复；
@@ -102,7 +102,7 @@
 
 （3 ）主机shutdown后情况如何？从机是上位还是原地待命
 
-答: 从机待命。还是`slave`。 
+答: 从机待命。还是`slave`。
 
 （4 ）主机又回来了后，主机新增记录，从机还能否顺利复制？
 
@@ -152,9 +152,25 @@
   * 例如配置: `sentinel monitor host6379 127.0.0.1 6379 1`。如果`6379`挂了，谁的票数多余1票，就自动化成为主机；
 * 启动哨兵:
   * `redis-sentinel /myredis/sentinel.conf`
-  * 你的 
 
 > 一组sentinel能同时监控多个Master。
+> sentinel 也有leader 的存在，一般通过版本号的高低选出（选高的）。
+
+![sentinel.png](images/sentinel.png)
+
+当前执行故障修复的哨兵会遍历主机的所有从机，只有足够健康的从机才能被成为候选主机。足够健康的条件包括：
+
+不能有下面三个标记中的一个：SRI_S_DOWN|SRI_O_DOWN|SRI_DISCONNECTED
+* ing 心跳正常
+* 优先级不能为 0（slave->slave_priority）
+* INFO 数据不能超时
+* 主从连接断线会时间不能超时
+
+满足以上条件就有机会成为候选主机，如果经过上面的筛选之后有多台从机，那么这些从机会按下面的条件排序：
+* 优选选择优先级高的从机
+* 优先选择主从复制偏移量高的从机，即从机从主机复制的数据越多
+* 优先选择有 runid 的从机
+* 如果上面条件都一样，那么将 runid 按字典顺序排序
 
 ![1_53.png](images/1_53.png)
 
@@ -176,7 +192,14 @@
 
 ![1_57.png](images/1_57.png)
 
+**在定时程序的调用链中，确实发现了哨兵主动连接 Redis 服务器的过程：**
 
+> sentinelTimer()->sentinelHandleRedisInstance()->sentinelReconnectInstance()。
 
-## 
+sentinelReconnectInstance() 负责连接被标记为 SRI_DISCONNECT 的 Redis 服务器。它对一个 Redis 服务器发起了两个连接：
 
+* 普通连接（sentinelRedisInstance.cc,Commands connection）
+* 订阅发布专用连接（sentinelRedisInstance.pc,publish connection）。为什么需要分这两个连接呢？因为对于一个客户端连接来说，redis 服务器要么专门处理普通的命令，要么专门处理订阅发布命令
+
+**更为详细的哨兵的介绍：**
+https://blog.csdn.net/lee_nacl/article/details/62044097
