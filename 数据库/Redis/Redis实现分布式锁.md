@@ -8,4 +8,46 @@
 - 第四个为expx，这个参数我们传的是PX，意思是我们要给这个key加一个过期的设置，具体时间由第五个参数决定。
 - 第五个为time，与第四个参数相呼应，代表key的过期时间。
 
+
+```java
+public class RedisTool {
+    private static final String LOCK_SUCCESS = "OK";
+    private static final String SET_IF_NOT_EXIST = "NX";
+    private static final String SET_WITH_EXPIRE_TIME = "PX";
+    /**
+     * 尝试获取分布式锁
+     * @param jedis Redis客户端
+     * @param lockKey 锁
+     * @param requestId 请求标识
+     * @param expireTime 超期时间
+     * @return 是否获取成功
+     */
+    public static boolean tryGetDistributedLock(Jedis jedis, String lockKey, String requestId, int expireTime) {
+
+        String result = jedis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
+
+        if (LOCK_SUCCESS.equals(result)) {
+            return true;
+        }
+        return false;
+    }
+}
+```
+
 总的来说，执行上面的set()方法就只会导致两种结果：1. 当前没有锁（key不存在），那么就进行加锁操作，并对锁设置个有效期，同时value表示加锁的客户端。2. 已有锁存在，不做任何操作。
+
+心细的童鞋就会发现了，我们的加锁代码满足我们可靠性里描述的三个条件。
+
+1. set()加入了NX参数，可以保证如果已有key存在，则函数不会调用成功，也就是只有一个客户端能持有锁，满足互斥性。
+
+2. 由于我们对锁设置了过期时间，即使锁的持有者后续发生崩溃而没有解锁，锁也会因为到了过期时间而自动解锁（即key被删除），不会发生死锁。
+
+3. 因为我们将value赋值为requestId，代表加锁的客户端请求标识，那么在客户端在解锁的时候就可以进行校验是否是同一个客户端。
+
+4. 由于我们只考虑Redis单机部署的场景，所以容错性我们暂不考虑。
+
+为了确保分布式锁可用，我们至少要确保锁的实现同时满足以下四个条件：
+* **互斥性**：在任意时刻，只有一个客户端能持有锁。
+* **不会发生死锁**：即使有一个客户端在持有锁的期间崩溃而没有主动解锁，也能保证后续其他客户端能加锁。
+* **具有容错性**：只要大部分的Redis节点正常运行，客户端就可以加锁和解锁。
+* **解铃还须系铃人**：加锁和解锁必须是同一个客户端，客户端自己不能把别人加的锁给解了。
