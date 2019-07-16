@@ -19,7 +19,7 @@ from .. on.. join ..where ..group by ....having ...select dinstinct ..order by l
 解析图:
 
 ![ad9_索引.png](images/ad9_索引.png)
-> 详细参考这篇博客: https://www.cnblogs.com/annsshadow/p/5037667.html
+> 详细参考这篇博客: <https://www.cnblogs.com/annsshadow/p/5037667.html>
 
 SQL优化， 主要就是在优化索引
 
@@ -62,7 +62,7 @@ SQL优化， 主要就是在优化索引
 	方式二(添加)：
 		alter table 表名 索引类型  索引名（字段）
             主键索引:
-            ALTER TABLE `table_name` ADD PRIMARY KEY ( `column` ) 
+            ALTER TABLE `table_name` ADD PRIMARY KEY ( `column` )
             单值：
             alter table tb add index dept_index(dept) ;
             唯一：
@@ -70,9 +70,9 @@ SQL优化， 主要就是在优化索引
             复合索引
             alter table tb add index dept_name_index(dept,name);
             全文索引
-            ALTER TABLE `table_name` ADD FULLTEXT ( `column`) 
-            
-    注意：如果一个字段是primary key，则改字段默认就是 主键索引	
+            ALTER TABLE `table_name` ADD FULLTEXT ( `column`)
+
+    注意：如果一个字段是primary key，则改字段默认就是 主键索引
 ```
 
 删除索引
@@ -91,7 +91,7 @@ show index from 表名 \G
 
 ### 4、哪些情况需要建立索引，哪些不需要
 
-需要建立索引的情况: 
+需要建立索引的情况:
 
 * 主键自动建立唯一索引(`primary key`)；
 * 频繁作为查询条件的字段应该创建索引(`where` 后面的语句)；
@@ -109,13 +109,13 @@ show index from 表名 \G
 
 ### 5、Explain
 
-具体可以参考这篇博客: [https://blog.csdn.net/drdongshiye/article/details/84546264](#https://blog.csdn.net/drdongshiye/article/details/84546264)。
+具体可以参考这篇博客: <https://blog.csdn.net/drdongshiye/article/details/84546264>
 
 #### 1)、概念和作用
 
 概念: 使用EXPLAIN关键字可以模拟优化器执行SQL查询语句，从而知道MySQL是 如何处理你的SQL语句的。分析你的查询语句或是表结构的性能瓶颈；
 
-作用: 
+作用:
 
 * 表的读取顺序；
 * 哪些索引可以使用；
@@ -169,7 +169,7 @@ key:
 
 #### 6)、key_len、ref、rows
 
-key_len 
+key_len
 
 * 表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度。
 * **在不损失精确性的情况下，长度越短越好**。
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `article`(
 INSERT INTO `article` (author_id,category_id,views,comments,title,content) VALUES
 (1,1,1,1,1,1),
 (2,2,2,2,2,2),
-(1,1,3,3,3,3); 
+(1,1,3,3,3,3);
 ```
 
 表中内容:
@@ -229,7 +229,7 @@ INSERT INTO `article` (author_id,category_id,views,comments,title,content) VALUE
 
 查询 `categoryid` 为1 且 `comments` 大于 1 的情况下，views 最多的文章。
 
-![ad_20.png](images/ad_20.png) 
+![ad_20.png](images/ad_20.png)
 
 完整代码:
 
@@ -379,7 +379,7 @@ mysql> ALTER TABLE class ADD INDEX X (card);
 Query OK, 0 rows affected (0.07 sec)
 Records: 0  Duplicates: 0  Warnings: 0
 
-mysql> 
+mysql>
 mysql> EXPLAIN SELECT * FROM class LEFT JOIN book ON class.card = book.card;
 +----+-------------+-------+------------+-------+---------------+------+---------+------+------+----------+----------------------------------------------------+
 | id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                              |
@@ -569,7 +569,7 @@ EXPLAIN SELECT id,NAME,age,email  FROM tbl_user WHERE NAME LIKE '%aa%';
 #create index  (上面的字符第一批在键了下面的索引后会优化，但是第二批搅屎棍不会,因为覆盖不了)
 # 为啥第一批的id也能优化，因为Extra中的 Using Index (主键本身也是索引)
 
-CREATE INDEX idx_user_nameAge ON tbl_user(NAME,age); 
+CREATE INDEX idx_user_nameAge ON tbl_user(NAME,age);
 ```
 
 #### 7)、字符串不加单引号索引失效(发生了类型转换)
@@ -607,7 +607,7 @@ Query OK, 0 rows affected (0.12 sec)
 Records: 0  Duplicates: 0  Warnings: 0
 
 #  1、全值匹配我最爱
-mysql> explain select * from test03 where c1='a1' and c2='a2' and c3='a3' and c4='a4'; 
+mysql> explain select * from test03 where c1='a1' and c2='a2' and c3='a3' and c4='a4';
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------------------+------+----------+-------+
 | id | select_type | table  | partitions | type | possible_keys    | key              | key_len | ref                     | rows | filtered | Extra |
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------------------+------+----------+-------+
@@ -616,7 +616,7 @@ mysql> explain select * from test03 where c1='a1' and c2='a2' and c3='a3' and c4
 1 row in set, 1 warning (0.31 sec)
 
 # 2、这种情况Mysql会底层会帮我们自动优化
-mysql>  explain select * from test03 where c1='a1' and c2='a2' and c4='a4' and c3='a3'; 
+mysql>  explain select * from test03 where c1='a1' and c2='a2' and c4='a4' and c3='a3';
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------------------+------+----------+-------+
 | id | select_type | table  | partitions | type | possible_keys    | key              | key_len | ref                     | rows | filtered | Extra |
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------------------+------+----------+-------+
@@ -624,7 +624,7 @@ mysql>  explain select * from test03 where c1='a1' and c2='a2' and c4='a4' and c
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------------------+------+----------+-------+
 1 row in set, 1 warning (0.00 sec)
 
-# 3、 中间阶段 -> range 
+# 3、 中间阶段 -> range
 mysql>  explain select * from test03 where c1='a1' and c2='a2' and c3>'a3' and c4='a4';
 +----+-------------+--------+------------+-------+------------------+------------------+---------+------+------+----------+-----------------------+
 | id | select_type | table  | partitions | type  | possible_keys    | key              | key_len | ref  | rows | filtered | Extra                 |
@@ -661,7 +661,7 @@ mysql>  explain select * from test03 where c1='a1' and c2='a2' order by c3;
 1 row in set, 1 warning (0.00 sec)
 
 # 6、出现了Using filesort
-mysql> explain select * from test03 where c1='a1' and c2='a2' order by c4; 
+mysql> explain select * from test03 where c1='a1' and c2='a2' order by c4;
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------+------+----------+---------------------------------------+
 | id | select_type | table  | partitions | type | possible_keys    | key              | key_len | ref         | rows | filtered | Extra                                 |
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------+------+----------+---------------------------------------+
@@ -670,7 +670,7 @@ mysql> explain select * from test03 where c1='a1' and c2='a2' order by c4;
 1 row in set, 1 warning (0.00 sec)
 
 # 8.1、 只用c1一个字段索引，但是c2、c3用于排序,所有没有 filesort
-mysql>  explain select * from test03 where c1='a1' and c5='a5' order by c2,c3; 
+mysql>  explain select * from test03 where c1='a1' and c5='a5' order by c2,c3;
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------+------+----------+------------------------------------+
 | id | select_type | table  | partitions | type | possible_keys    | key              | key_len | ref   | rows | filtered | Extra                              |
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------+------+----------+------------------------------------+
@@ -706,7 +706,7 @@ mysql> explain select * from test03 where c1='a1' and c2='a2' and c5='a5' order 
 1 row in set, 1 warning (0.00 sec)
 
 # 10.2、 这里排序字段已经是一个常量 和8.2不同  
-mysql>  explain select * from test03 where c1='a1' and c2='a2' and c5='a5' order by c3,c2; 
+mysql>  explain select * from test03 where c1='a1' and c2='a2' and c5='a5' order by c3,c2;
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------+------+----------+------------------------------------+
 | id | select_type | table  | partitions | type | possible_keys    | key              | key_len | ref         | rows | filtered | Extra                              |
 +----+-------------+--------+------------+------+------------------+------------------+---------+-------------+------+----------+------------------------------------+
@@ -725,9 +725,9 @@ mysql>  explain select * from test03 where c1='a1' and c5='a5' order by c3,c2;
 
 
 # 11、group 虽然是分组，但是分组之前必排序 (可能导致临时表)
- explain select * from test03 where c1='a1' and c4='a4' group by c2,c3; # 
-# 12、灭绝师太!!! Using temporary; Using filesort 
- explain select * from test03 where c1='a1' and c4='a4' group by c3,c2; 
+ explain select * from test03 where c1='a1' and c4='a4' group by c2,c3; #
+# 12、灭绝师太!!! Using temporary; Using filesort
+ explain select * from test03 where c1='a1' and c4='a4' group by c3,c2;
 ```
 
 ### 8、order by关键字排序优化
@@ -833,7 +833,7 @@ mysql> explain select * from tblA where age>20 order by birth, age;
 
 3)、尝试提高 `max_length_for_sort_data`
 
-提高这个参数， 会增加用改进算法的概率。但是如果设的太高，数据总容量超出sort_buffer_size的概率就增大，明显症状是高的磁盘I/O活动和低的处理器使用率. 
+提高这个参数， 会增加用改进算法的概率。但是如果设的太高，数据总容量超出sort_buffer_size的概率就增大，明显症状是高的磁盘I/O活动和低的处理器使用率.
 
 ![ad_31.png](images/ad_31.png)
 
@@ -847,19 +847,19 @@ mysql> explain select * from tblA where age>20 order by birth, age;
 
 ### 9、B+Tree与B-Tree 的区别
 
-结论在内存有限的情况下，B+TREE 永远比 B-TREE好。无限内存则后者方便。 
+结论在内存有限的情况下，B+TREE 永远比 B-TREE好。无限内存则后者方便。
 
 * 1)、B-树的关键字和记录是放在一起的，叶子节点可以看作外部节点，不包含任何信息；**B+树叶子节点中只有关键字和指向下一个节点的索引**，记录只放在叶子节点中。(一次查询可能进行两次i/o操作)
 
-* 2)、在B-树中，越靠近根节点的记录查找时间越快，只要找到关键字即可确定记录的存在；而B+树中每个记录的查找时间基本是一样的，都需要从根节点走到叶子节点，而且在叶子节点中还要再比较关键字。从这个角度看B-树的性能好像要比B+树好，而在实际应用中却是B+树的性能要好些。因为B+树的非叶子节点不存放实际的数据，**这样每个节点可容纳的元素个数比B-树多**，树高比B-树小，这样带来的好处是减少磁盘访问次数。尽管B+树找到一个记录所需的比较次数要比B-树多，但是一次磁盘访问的时间相当于成百上千次内存比较的时间，因此实际中B+树的性能可能还会好些，**而且B+树的叶子节点使用指针连接在一起，方便顺序遍历**（例如查看一个目录下的所有文件，一个表中的所有记录等），这也是很多数据库和文件系统使用B+树的缘故。 
+* 2)、在B-树中，越靠近根节点的记录查找时间越快，只要找到关键字即可确定记录的存在；而B+树中每个记录的查找时间基本是一样的，都需要从根节点走到叶子节点，而且在叶子节点中还要再比较关键字。从这个角度看B-树的性能好像要比B+树好，而在实际应用中却是B+树的性能要好些。因为B+树的非叶子节点不存放实际的数据，**这样每个节点可容纳的元素个数比B-树多**，树高比B-树小，这样带来的好处是减少磁盘访问次数。尽管B+树找到一个记录所需的比较次数要比B-树多，但是一次磁盘访问的时间相当于成百上千次内存比较的时间，因此实际中B+树的性能可能还会好些，**而且B+树的叶子节点使用指针连接在一起，方便顺序遍历**（例如查看一个目录下的所有文件，一个表中的所有记录等），这也是很多数据库和文件系统使用B+树的缘故。
 
-思考：为什么说B+树比B-树更适合实际应用中操作系统的文件索引和数据库索引？ 
+思考：为什么说B+树比B-树更适合实际应用中操作系统的文件索引和数据库索引？
 
-1) B+树的磁盘读写代价更低 
+1) B+树的磁盘读写代价更低
 
-　　**B+树的内部结点并没有指向关键字具体信息的指针**。因此其内部结点相对B 树更小。如果把所有同一内部结点的关键字存放在同一盘块中，那么盘块所能容纳的关键字数量也越多。一次性读入内存中的需要查找的关键字也就越多。相对来说IO读写次数也就降低了。 
+　　**B+树的内部结点并没有指向关键字具体信息的指针**。因此其内部结点相对B 树更小。如果把所有同一内部结点的关键字存放在同一盘块中，那么盘块所能容纳的关键字数量也越多。一次性读入内存中的需要查找的关键字也就越多。相对来说IO读写次数也就降低了。
 
-2) B+树的查询效率更加稳定 
+2) B+树的查询效率更加稳定
 
 　　由于非终结点并不是最终指向文件内容的结点，而只是叶子结点中关键字的索引。所以任何关键字的查找必须走一条从根结点到叶子结点的路。所有关键字查询的路径长度相同，导致每一个数据的查询效率相当。
 
@@ -882,15 +882,32 @@ mysql> explain select * from tblA where age>20 order by birth, age;
 
 聚簇索引优点 : 按照聚簇索引排列顺序，查询显示一定范围数据的时候，**由于数据都是紧密相连，数据库不用从多个数据块中提取数据**，所以节省了大量的io操作。
 
-聚簇索引限制 : 
+聚簇索引限制 :
 
 - 对于mysql数据库目前只有innodb数据引擎支持聚簇索引，而MyIsam并不支持聚簇索引。
 - 由于*数据物理存储排序方式只能有一种*，所以每个Mysql的表只能有一个聚簇索引。一般情况下就是该表的**主键**。
 - **为了充分利用聚簇索引的聚簇的特性，所以innodb表的主键列尽量选用有序的顺序id，而不建议用无序的id，比如uuid这种。（参考聚簇索引优点。）**
 
+#### 聚族索引的优点
+1. 可以把相关数据保存在一起。例如实现电子邮件时，可以根据用户ID来聚集数据，这样只需要从磁盘读取少数的数据页就能获取某个用户的全部邮件。如果没有使用聚族索引，则每封邮件都可能导致一次磁盘I/O；
+2. 数据访问更快。聚族索引将索引和数据保存在同一个B-Tree中，因此从聚族索引中获取数据通常比在非聚族索引中查找更快。
+3. 使用覆盖索引扫描的查询可以直接使用节点中的主键值。
+
+#### 聚族索引的缺点
+1. 聚簇数据最大限度的提高了I/O密集型应用的性能，但如果数据全部都放在内存中，则访问的顺序就没有那么重要了，聚簇索引也就没有那么优势了；
+2. 插入速度严重依赖于插入顺序。按照主键的顺序插入是加载数据到InnoDB表中速度最快的方式。但如果不是按照主键顺序加载数据，那么在加载完成后最好使用OPTIMIZE TABLE命令重新组织一下表。
+3. 更新聚簇索引列的代价很高，因为会强制InnoDB将每个被更新的行移动到新的位置。
+4. 基于聚簇索引的表在插入新行，或者主键被更新导致需要移动行的时候，可能面临“页分裂”的问题。当行的主键值要求必须将这一行插入到某个已满的页中时，存储引擎会将该页分裂成两个页面来容纳该行，这就是一次分裂操作。页分裂会导致表占用更多的磁盘空间。
+5. 聚簇索引可能导致全表扫描变慢，尤其是行比较稀疏，或者由于页分裂导致数据存储不连续的时候。
+6. 二级索引（非聚簇索引）可能比想象的要更大，因为在二级索引的叶子节点包含了引用行的主键列。
+
+**有关二级索引需要两次索引查找的问题？**
+
+答案在于二级索引中保存的“行指针”的实质。要记住，二级索引叶子节点保存的不是指向行的物理位置的指针，而是行的主键值。这意味着通过二级索引查找行，存储引擎需要找到二级索引的叶子节点获得对应的主键值，然后根据这个值去聚簇索引中查找到对应的行。这里做了重复的工作：两次B-Tree查找而不是一次。对于InnoDB，自适应哈希索引能够减少这样的重复工作。
+
 ### 11、全文索引、Hash索引
 
-**全文索引** 
+**全文索引**
 
 * MyISAM 存储引擎支持全文索引，用于查找文本中的关键词，而不是直接比较是否相等。
 * 查找条件使用 MATCH AGAINST，而不是普通的 WHERE。
@@ -939,16 +956,3 @@ GROUP BY关键字优化:
 * group by实质是先排序后进行分组，遵照索引建的最佳左前缀；
 * 当无法使用索引列，增大`max_length_for_sort_data`参数的设置+增大`sort_buffer_size`参数的设置；
 * where高于having，能写在where限定的条件就不要去having限定了；
-
-
-
-
-
-
-
-
-
-
-
-
-
