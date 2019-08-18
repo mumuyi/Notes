@@ -135,34 +135,59 @@ public class d26_复杂链表的复制 {
 
     /**
      * 法2： 1->1'->2->2'->...
-     *
-     * @param head
-     * @return
      */
-    private static ComplexListNode clone2(ComplexListNode head) {
-        if (head == null) {
-            return null;
-        }
+     /*
+     // Definition for a Node.
+     class Node {
+         public int val;
+         public Node next;
+         public Node random;
 
-        ComplexListNode cur = head;
-        ComplexListNode curCopy = null;
-        while (cur != null) {
-            curCopy = new ComplexListNode(cur.value);
-            curCopy.sibling = cur.sibling;
-            curCopy.next = cur.next;
-            cur.next = curCopy;
-            cur = curCopy.next;
-        }
+         public Node() {}
 
-        cur = head;
-        ComplexListNode clone = null;
-        ComplexListNode res = cur.next;
-        while (cur != null) {   //将clone链表从原链表中剥离出来，并恢复原链表
-            clone = cur.next;
-            clone.next = cur.next.next;
-            cur.next = clone.next;
-            cur = cur.next;
-        }
-        return res;
-    }
+         public Node(int _val,Node _next,Node _random) {
+             val = _val;
+             next = _next;
+             random = _random;
+         }
+     };
+     */
+     public class Solution {
+         public Node copyRandomList(Node head){
+             if (head == null){
+                 return null;
+             }
+
+             //1.新节点接到原对应节点的后面。
+             Node cur = head;
+             Node curCopy = null;
+             while(cur != null){
+                 curCopy = new Node(cur.val);
+                 curCopy.next = cur.next;
+                 cur.next = curCopy;
+                 cur = curCopy.next;
+             }
+
+             //2.参照原节点的random，改变新节点的rondom
+             cur = head;
+             while(cur != null){
+                 cur.next.random = cur.random == null ? null : cur.random.next;
+                 cur = cur.next.next;
+             }
+
+             //3.将两部分分离
+             cur = head;
+             Node clone = cur.next;
+             Node res = cur.next;
+             while(cur != null){
+                 cur.next = clone.next;
+                 if(clone.next != null){
+                     clone.next = clone.next.next;
+                 }
+                 cur = cur.next;
+                 clone = clone.next;
+             }
+             return res;
+         }
+     }
 }

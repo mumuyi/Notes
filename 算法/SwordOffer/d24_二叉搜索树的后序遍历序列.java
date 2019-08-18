@@ -14,7 +14,7 @@ public class d24_二叉搜索树的后序遍历序列 {
 
 
     private static boolean verifySequenceOfBST(int[] squence) {
-        if (squence == null || squence.length<=0){
+        if (squence == null || squence.length <= 0){
             return false;
         }
         return verifySequenceOfBST(squence, 0, squence.length-1);
@@ -27,22 +27,22 @@ public class d24_二叉搜索树的后序遍历序列 {
         int root = squence[end];    //end位置为根结点
         int index = 0;
         //找到第一个比根结点大的数的位置
-        while (squence[index]<root && index<end-1){
+        while (squence[index] < root && index < end - 1){
             index++;
         }
         int mid = index;
-        while (squence[index]>root && index<end-1){
+        while (squence[index] > root && index < end - 1){
             index++;
         }
-        if (index != end-1){    //end-1位置应该为root的右子树的根结点
+        if (index != end - 1){    //end-1位置应该为root的右子树的根结点
             return false;   //出现了异常，无法完成此出站序列
         }
-        return verifySequenceOfBST(squence,start,mid-1) && verifySequenceOfBST(squence,mid,end-1);
+        return verifySequenceOfBST(squence, start, mid - 1) && verifySequenceOfBST(squence, mid, end - 1);
     }
 
 
     public static void main(String[] args) {
-        
+
         //           10
         //         /   \
         //        6     14

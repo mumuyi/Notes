@@ -39,8 +39,8 @@ public class d22_栈的压入$弹出序列 {
         int pushIndex = 0;
         int popIndex = 0;
         Stack<Integer> stack = new Stack<>();
-        while (popIndex<pop.length){
-            while (pushIndex<push.length && (stack.isEmpty() || pop[popIndex]!=stack.peek())){
+        while (popIndex < pop.length){
+            while (pushIndex < push.length && (stack.isEmpty() || pop[popIndex] != stack.peek())){
                 stack.push(push[pushIndex++]);
             }
             if (pop[popIndex] == stack.peek()){
