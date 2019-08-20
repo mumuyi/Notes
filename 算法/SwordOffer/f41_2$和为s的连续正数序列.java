@@ -51,7 +51,7 @@ public class f41_2$和为s的连续正数序列 {
             if (curSum == s){
                 addListToResult(p1, p2, result);
             }
-            while (curSum > s && p1<mid){
+            while (curSum > s && p1 < mid){
                 curSum -= p1;
                 p1++;
                 if (curSum == s){

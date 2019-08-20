@@ -27,14 +27,14 @@ public class d24_二叉搜索树的后序遍历序列 {
         int root = squence[end];    //end位置为根结点
         int index = 0;
         //找到第一个比根结点大的数的位置
-        while (squence[index] < root && index < end - 1){
+        while (squence[index] < root && index < end){
             index++;
         }
         int mid = index;
-        while (squence[index] > root && index < end - 1){
+        while (squence[index] > root && index < end){
             index++;
         }
-        if (index != end - 1){    //end-1位置应该为root的右子树的根结点
+        if (index != end){    //end-1位置应该为root的右子树的根结点
             return false;   //出现了异常，无法完成此出站序列
         }
         return verifySequenceOfBST(squence, start, mid - 1) && verifySequenceOfBST(squence, mid, end - 1);

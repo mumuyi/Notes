@@ -61,7 +61,7 @@ public class h51_数组中重复的数字 {
                 if (arr[arr[i]] == arr[i]){
                     return arr[i];
                 } else {
-                    SwapUtil.swap(arr, arr[i], i);
+                    SwapUtil.swap(arr, arr[i], arr[arr[i]]);
                 }
             }
         }
