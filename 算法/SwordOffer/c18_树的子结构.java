@@ -6,7 +6,7 @@ import StandardStruct.BinaryTreeNode;
  * 题目：输入两棵二叉树 A 和 B，判断 B 是不是 A 的子结构。
  *
  * 【解】：
- *      利用二叉树的神级遍历(空间复杂度：O(1)， 时间复杂度：O(h))
+ *      利用二叉树的层级遍历(空间复杂度：O(1)， 时间复杂度：O(h))
  *      转化成字符串匹配问题：KMP算法（时间：O(N)）
  *      总的时间复杂度：O(N)
  *
@@ -205,7 +205,7 @@ public class c18_树的子结构 {
         System.out.println(hasSubtreeWithRecursion(head1, null));
         System.out.println(hasSubtreeWithRecursion(null, head2));
         System.out.println(hasSubtreeWithRecursion(null, null));
-        
+
     }
 
 }

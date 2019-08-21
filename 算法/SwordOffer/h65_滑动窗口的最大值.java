@@ -38,35 +38,31 @@ public class h65_滑动窗口的最大值 {
         SysOut.printArray(maxInWindows(data7, 4));
     }
 
-    private static int[] maxInWindows(int[] arr, int w) {
+    import java.util.*;
+    public class Solution {
+        public ArrayList<Integer> maxInWindows(int [] num, int size)
+        {
+            ArrayList<Integer> ans = new ArrayList<Integer>();
+            if(num == null || num.length == 0 || size == 0 || num.length < size){
+                return ans;
+            }
+            LinkedList<Integer> q = new LinkedList<Integer>();
+            for(int i = 0; i < num.length; i++){
+                while(!q.isEmpty() && num[q.peekLast()] <= num[i]){
+                    q.pollLast();
+                }
+                q.addLast(i);
 
-        if (arr == null || arr.length<=0 || w < 1) {
-            throw new IllegalArgumentException("Invalid args");
-        }
-        if (arr.length < w){
-            int max = arr[0];
-            for(int i : arr){
-                max = max>i? max : i;
-            }
-            return new int[]{max};
-        }
+                if(i - q.peekFirst() >= size){
+                    q.pollFirst();
+                }
 
-        LinkedList<Integer> deque = new LinkedList<Integer>();
-        int[] res = new int[arr.length - w + 1];
-        int cnt = 0;
-        for (int i = 0; i < arr.length; i++) {
-            while (!deque.isEmpty() && arr[deque.peekFirst()] <= arr[i]) {
-                deque.pollLast();
+                if(i + 1 >= size){
+                    ans.add(num[q.peekFirst()]);
+                }
             }
-            deque.addLast(i);
-            if (deque.peekFirst() <= i - w) {
-                deque.pollFirst();
-            }
-            if (i >= w - 1) {
-                res[cnt++] = arr[deque.peekFirst()];
-            }
-        }
 
-        return res;
+            return ans;
+        }
     }
 }
